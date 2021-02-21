@@ -17,7 +17,7 @@
 	onMount(() => {
 		peer = new Peer();
 		peer.on("open", (localId) => {
-			peer.id = peer.id;
+			//peer.id = peer.id;
 			conn = peer.connect(id, { reliable: true });
 			conn.on("error", console.error);
 			conn.on("open", () => {
@@ -53,7 +53,7 @@
 	function sendAudio(audio: ArrayBuffer) {
 		send({
 			type: "audio",
-			audio,
+			audio: new Int8Array(audio),
 		});
 	}
 
