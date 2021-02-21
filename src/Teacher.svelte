@@ -88,7 +88,7 @@
         Pause(color="{iconColor}", width="{iconSize}", height="{iconSize}")
     div.gradient
 
-    +each("Object.entries(connData) as [id, track] (id)")
+    +each("Object.entries(connData) as [trackId, track] (trackId)")
       Track(label="{track.label}" audio="{track.audio}")
     Track(label="test" audio="oh no" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")
     Track(label="test" audio="oh no" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")
