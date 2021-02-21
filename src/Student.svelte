@@ -121,11 +121,13 @@
 </script>
 
 <template lang="pug">
-	p Student
-	p {peer?.id}
+	//- p Student
+	//- p {peer?.id}
 	.background
 		.text
-			TextField(outline label="Label" bind:value="{label}" disabled="{recording || finished}")
+			h1.record-title Enter a Label Below to Record!
+			form.formcontainer
+				input.form-input(placeholder="Label" bind:value="{label}" disabled="{recording || finished}")
 		div(data-role='controls')
 			.shadow(class:round="{!recording}" class:square="{recording}")
 				button(on:click!="{check}" title="Record" disabled="{disabled}")
@@ -156,6 +158,13 @@
 	@mixin makeGradient($start, $end, $direction: to right) {
 		background-color: color.mix($start, $end);
 		background-image: linear-gradient($direction, $start, $end);
+	}
+
+	.record-title {
+		color: white;
+		font-size: 2rem;
+		padding-left: 2rem;
+		padding-right: 2rem;
 	}
 
 	.background {
@@ -223,5 +232,26 @@
 
 	.time {
 		color: white;
+	}
+
+	.formcontainer {
+		text-align: center;
+		align: center;
+	}
+	.check-in {
+		text-align: center;
+		align: center;
+	}
+	.form-input {
+		font-size: 1.5rem;
+		margin-top: 10px;
+		margin-bottom: 30px;
+		margin-right: 1rem;
+		padding: 12px 12px;
+		width: 60%;
+		background: rgba(38, 38, 38, 1);
+		color: white;
+		border: 1px solid rgba(255, 255, 255, 1);
+		border-radius: 20px;
 	}
 </style>

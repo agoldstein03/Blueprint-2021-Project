@@ -29,6 +29,15 @@
 		font-family: "Open Sans", sans-serif;
 	}
 
+	.testingclass {
+		color: white;
+	}
+
+	.inputlabel {
+		border-color: white;
+		border-width: 10px;
+	}
+
 	body {
 		margin: 0;
 		box-sizing: border-box;

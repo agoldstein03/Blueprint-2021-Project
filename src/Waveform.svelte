@@ -2,19 +2,22 @@
 	import Peaks from "peaks.js";
 	import { audioContext } from "./store.js";
 
-	export let audioBuffer;
+	export let arrayBuffer, playheadPos;
 
+    let waveform
     let peaks
+    $: if (peaks && playheadPos) peaks.player.seek(playheadPos)
     export const player = {
         play() {
             if (!peaks) {
                 $audioContext.resume()
                 const options = {
                     containers: {
-                        overview: document.querySelector('.waveform'),
+                        overview: waveform,
                     },
-                    mediaElement: document.querySelector('audio'),
+                    mediaElement: waveform.parentElement.querySelector('audio'),
                     webAudio: {
+                        // audioBuffer: $audioContext.decodeAudioData(arrayBuffer),
                         audioContext: $audioContext,
                     },
                     overviewWaveformColor: 'rgba(255, 255, 255, 1)',
@@ -24,9 +27,12 @@
                     const view = instance.views.getView('overview');
                     view.setAmplitudeScale(0.8);
                     view.fitToContainer()
-                    document.querySelector('.konvajs-content').removeChild(document.getElementsByTagName('canvas')[4])
+                    waveform.querySelector('.konvajs-content').removeChild(waveform.getElementsByTagName('canvas')[4])
                     peaks = instance
                     peaks.player.play()
+                    peaks.on('player.seeked', (time) => {
+                        playheadPos = time
+                    })
                 })
             } else {
                 peaks.player.play()
@@ -36,13 +42,20 @@
             if (peaks) {
                 peaks.player.pause()
             }
+        },
+        grayout(muted) {
+            if (muted) {
+                waveform.classList.add('muted')
+            } else {
+                waveform.classList.remove('muted')
+            }
         }
     }
 </script>
 
 <template lang="pug">
-    div.waveform
-
+    div.waveform(bind:this="{waveform}")
+    div.muted
     // Temporary
     audio(src='../oof.mp3')
         track(kind='captions')
@@ -63,4 +76,7 @@
 		border-radius: 16px;
         height: 100%;
 	}
+    .muted {
+        background: linear-gradient(to right, #555555, #444444) !important;
+    }
 </style>

@@ -4,15 +4,15 @@
         p Audio: {audio}
         VolumeControl(bind:gainNode="{gainNode}")
         div.track-buttons
-            Button.play(hidden, filled, style="background: white; border-radius: 16px; padding: 8px; margin-bottom: 8px;", on:click!="{play}")
+            Button.play(hidden, filled, style="background: white; border-radius: 16px; padding: 8px; padding-bottom: 4px; margin-bottom: 8px;", on:click!="{startPlaying}")
                 Play(color="{iconColor}", width="{iconSize}", height="{iconSize}")
-            Button.pause(filled, style="display: none; background: white; border-radius: 16px; padding: 8px; margin-bottom: 8px;", on:click!="{pause}")
+            Button.pause(filled, style="display: none; background: white; border-radius: 16px; padding: 8px; padding-bottom: 4px; margin-bottom: 8px;", on:click!="{stopPlaying}")
                 Pause(color="{iconColor}", width="{iconSize}", height="{iconSize}")
             Button.mute(filled, style="background: white; padding: 8px; border-radius: 16px;", on:click!="{mute}")
                 Headphones(color="{iconColor}", width="{iconSize}", height="{iconSize}")
             Button.unmute(filled, style="display: none; background: white; padding: 8px; border-radius: 16px;", on:click!="{unmute}")
                 HeadphonesOff(color="{iconColor}", width="{iconSize}", height="{iconSize}")
-        Waveform(bind:player="{waveform}")
+        Waveform(bind:player="{waveform}" bind:playheadPos="{playheadPos}")
 </template>
 
 <style>
@@ -39,8 +39,7 @@
     import Headphones from "svelte-material-icons/Headphones.svelte";
     import HeadphonesOff from "svelte-material-icons/HeadphonesOff.svelte";
 
-    export let label, audio;
-    
+    export let label, audio, playheadPos;
     let iconColor = "#262626";
     let iconSize = "32px";
 
@@ -48,40 +47,62 @@
     let waveform
     let source
     let gainNode
+    let muteNode
 
     export let isPlaying = false
     export let isMuted = false
 
+    $: if (waveform && isPlaying) play()
+    $: if (waveform && !isPlaying) pause()
+
+    function startPlaying() {
+        isPlaying = true
+    }
+    function stopPlaying() {
+        isPlaying = false
+    }
+
     function play() {
         waveform.play()
-        isPlaying = true
         track.querySelector('.play').style.display = 'none'
         track.querySelector('.pause').style.display = 'block'
-        track.querySelector('.play').style['padding-bottom'] = '4px'
-        track.querySelector('.pause').style['padding-bottom'] = '4px'
 
         if (!source) {
             $audioContext.resume();
-            source = $audioContext.createMediaElementSource(document.querySelector('audio'))
+            source = $audioContext.createMediaElementSource(track.querySelector('audio'))
             source.connect(gainNode).connect($audioContext.destination)
+            muteNode = $audioContext.createGain()
+            muteNode.gain.value = 0
         }
     }
     function pause() {
         waveform.pause()
-        isPlaying = false
         track.querySelector('.play').style.display = 'block'
         track.querySelector('.pause').style.display = 'none'
     }
+
     function mute() {
+        waveform.grayout(true)
         isMuted = true
         track.querySelector('.mute').style.display = 'none'
         track.querySelector('.unmute').style.display = 'block'
         track.querySelector('.mute').style['padding-bottom'] = '4px'
         track.querySelector('.unmute').style['padding-bottom'] = '4px'
+
+        if (source) {
+            source.disconnect()
+            source.connect(muteNode).connect($audioContext.destination)
+        }
     }
     function unmute() {
+        waveform.grayout(false)
         isMuted = false
         track.querySelector('.mute').style.display = 'block'
         track.querySelector('.unmute').style.display = 'none'
+
+        if (source) {
+            source.disconnect()
+            source.connect(gainNode).connect($audioContext.destination)
+        }
     }
 </script>
