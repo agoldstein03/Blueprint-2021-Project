@@ -1,17 +1,24 @@
 <script>
-	import { audioContext } from "./store.js";
-	import VerticalSlider from "./VerticalSlider.svelte";
+    import { audioContext } from './store.js'
+    import VerticalSlider from './VerticalSlider.svelte'
+    
+    export let gainNode
+    let gain = 1
 
-	export let gainNode;
-	let gain = 0;
-	$: if (gainNode) gainNode.gain.value = gain;
-
-	document.addEventListener("click", () => {
-		if (!gainNode) {
-			$audioContext.resume();
-			gainNode = $audioContext.createGain();
-		}
-	});
+    document.addEventListener('click', () => {
+        if (!gainNode) {
+            $audioContext.resume()
+            gainNode = $audioContext.createGain()
+        }
+    })
+    $: changeGain(gain)
+    function changeGain(newGain) {
+        if (!gainNode) {
+            $audioContext.resume()
+            gainNode = $audioContext.createGain()
+        }
+        gainNode.gain.value = gain
+    }
 </script>
 
 <template lang="pug">

@@ -4,6 +4,7 @@
 	import Home from "./Home.svelte";
 	import Student from "./Student.svelte";
 	import Teacher from "./Teacher.svelte";
+	import Track from "./Track.svelte";
 
 	export let url = "";
 </script>
@@ -12,11 +13,11 @@
   Router({url})
     main
       Route(path='/')
-        Home
+        Teacher
       Route(path='/submit/:id' let:params="{params}")
         Student(id="{params.id}")
       Route(path='/create/:id' let:params="{params}")
-        Teacher(id="{params.id}")
+        Track
 </template>
 
 <style lang="scss" global>
