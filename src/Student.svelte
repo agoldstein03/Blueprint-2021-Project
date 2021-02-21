@@ -121,19 +121,18 @@
 </script>
 
 <template lang="pug">
-  p Student
-  p {peer?.id}
-.background
-	.text
-	TextField(outline label="Label" bind:value="{label}" disabled="{recording || finished}")
-	div(data-role='controls')
-	div.shadow(class:round="{!recording}" class:square="{recording}")
-		button(on:click!="{check}" title="Record" disabled="{disabled}")
-	h1.time
-		span#minutes {min}
-		span :
-		span#seconds {sec}
-  body
+	p Student
+	p {peer?.id}
+	.background
+		.text
+		TextField(outline label="Label" bind:value="{label}" disabled="{recording || finished}")
+		div(data-role='controls')
+		div.shadow(class:round="{!recording}" class:square="{recording}")
+			button(on:click!="{check}" title="Record" disabled="{disabled}")
+		h1.time
+			span#minutes {min}
+			span :
+			span#seconds {sec}
 </template>
 
 <style lang="scss">
