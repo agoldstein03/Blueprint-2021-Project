@@ -4,6 +4,8 @@
 	import type { PeerDataType } from './PeerDataType'
 	import { Label } from 'attractions'
 	import { onMount } from 'svelte'
+	import { Button } from 'attractions'
+	import Play from 'svelte-material-icons/Play.svelte'
 
 	export let id: string | undefined
 
@@ -47,13 +49,21 @@
 
 	let isPlaying,
 		playheadPos = 0
+
+	let iconColor = '#262626'
+	let iconSize = '6em'
+
+	function playAll() {
+		isPlaying = true
+	}
 </script>
 
 <template lang="pug">
-  body
     div
       h1.title Harmony
       h2.code a08w9fa
+      Button.big-play(hidden, filled, style="position: absolute; bottom: 3em; right: 3em; background: white; border-radius: 3em; padding: 8px; width: 6em; height: 6em;", on:click!="{playAll}")
+        Play(color="{iconColor}", width="{iconSize}", height="{iconSize}")
     div.gradient
 
     +each("Object.entries(connData) as [id, track] (id)")
