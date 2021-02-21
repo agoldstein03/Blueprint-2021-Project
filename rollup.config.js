@@ -37,6 +37,7 @@ export default {
 		name: 'app',
 		file: 'public/dist/bundle.js'
 	},
+	external: 'peerjs',
 	plugins: [
 		svelte({
 			compilerOptions: {
