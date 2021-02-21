@@ -10,7 +10,7 @@
 	let peer: Peer;
 
 	onMount(() => {
-		peer = new Peer(/*id*/);
+		peer = new Peer(id);
 		console.log({ peer });
 		peer.on("open", (localId) => {
 			peer.id = peer.id;
