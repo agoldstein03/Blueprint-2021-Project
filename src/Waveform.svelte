@@ -1,29 +1,31 @@
 <script>
-    import Peaks from 'peaks.js'
-    import { audioContext } from './store.js'
+	import Peaks from "peaks.js";
+	import { audioContext } from "./store.js";
 
-    export let audioBuffer
+	export let audioBuffer;
 
-    document.addEventListener('click', () => {
-        $audioContext.resume()
-        const options = {
-            containers: {
-                overview: document.querySelector('.waveform'),
-            },
-            mediaElement: document.querySelector('audio'),
-            webAudio: {
-                audioContext: $audioContext,
-            },
-            overviewWaveformColor: 'rgba(255, 255, 255, 1)',
-            playheadColor: 'rgba(255, 255, 255, 1)',
-        }
-        Peaks.init(options, function (err, peaks) {
-            const view = peaks.views.getView('overview');
-            view.setAmplitudeScale(0.8);
-            view.fitToContainer()
-            document.querySelector('.konvajs-content').removeChild(document.getElementsByTagName('canvas')[4])
-        })
-    })
+	document.addEventListener("click", () => {
+		$audioContext.resume();
+		const options = {
+			containers: {
+				overview: document.querySelector(".waveform"),
+			},
+			mediaElement: document.querySelector("audio"),
+			webAudio: {
+				audioContext: $audioContext,
+			},
+			overviewWaveformColor: "rgba(255, 255, 255, 1)",
+			playheadColor: "rgba(255, 255, 255, 1)",
+		};
+		Peaks.init(options, function (err, peaks) {
+			const view = peaks.views.getView("overview");
+			view.setAmplitudeScale(0.8);
+			view.fitToContainer();
+			document
+				.querySelector(".konvajs-content")
+				.removeChild(document.getElementsByTagName("canvas")[4]);
+		});
+	});
 </script>
 
 <template lang="pug">
@@ -35,9 +37,17 @@
 </template>
 
 <style>
-    .waveform {
-        flex-grow: 1;
-        background: linear-gradient(to right, #1459ff, #3245ff, #681fff, #8410ff, #a509ff, #c103ff);
-        border-radius: 16px;
-    }
+	.waveform {
+		flex-grow: 1;
+		background: linear-gradient(
+			to right,
+			#1459ff,
+			#3245ff,
+			#681fff,
+			#8410ff,
+			#a509ff,
+			#c103ff
+		);
+		border-radius: 16px;
+	}
 </style>

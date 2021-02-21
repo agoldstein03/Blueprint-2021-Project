@@ -1,8 +1,8 @@
 <script>
-  import VolumeControl from "./VolumeControl.svelte";
-  import Waveform from "./Waveform.svelte";
+	import VolumeControl from "./VolumeControl.svelte";
+	import Waveform from "./Waveform.svelte";
 
-  export let label, audio;
+	export let label, audio;
 </script>
 
 <template lang="pug">
@@ -14,9 +14,9 @@
 </template>
 
 <style>
-  .track {
-    height: 200px;
-    border-radius: 16px;
-    display: flex;
-  }
+	.track {
+		height: 200px;
+		border-radius: 16px;
+		display: flex;
+	}
 </style>
