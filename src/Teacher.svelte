@@ -1,52 +1,52 @@
 <script lang="ts">
-	import Track from './Track.svelte'
-	import Peer from 'peerjs'
-	import type { PeerDataType } from './PeerDataType'
-	import { Label } from 'attractions'
-	import { onMount } from 'svelte'
+	import Track from "./Track.svelte";
+	import Peer from "peerjs";
+	import type { PeerDataType } from "./PeerDataType";
+	import { Label } from "attractions";
+	import { onMount } from "svelte";
 
-	export let id: string | undefined
+	export let id: string | undefined;
 
-	let peer: Peer | undefined
+	let peer: Peer | undefined;
 
 	onMount(() => {
-		peer = new Peer(id)
-		console.log({ peer })
-		peer.on('open', (localId) => {
-			peer.id = peer.id
-		})
-		peer.on('error', console.error)
+		peer = new Peer(id);
+		console.log({ peer });
+		peer.on("open", (localId) => {
+			peer.id = peer.id;
+		});
+		peer.on("error", console.error);
 
-		peer.on('connection', (conn) => {
-			console.log({ conn })
-			conn.on('open', () => {
-				console.log('OPEN!!')
-				connData[conn.peer] = {}
-			})
-			conn.on('data', (data: PeerDataType) => {
-				console.log({ data })
+		peer.on("connection", (conn) => {
+			console.log({ conn });
+			conn.on("open", () => {
+				console.log("OPEN!!");
+				connData[conn.peer] = {};
+			});
+			conn.on("data", (data: PeerDataType) => {
+				console.log({ data });
 				switch (data.type) {
-					case 'label':
-						connData[conn.peer].label = data.label
-						break
-					case 'audio':
-						connData[conn.peer].audio = data.audio
-						break
+					case "label":
+						connData[conn.peer].label = data.label;
+						break;
+					case "audio":
+						connData[conn.peer].audio = data.audio;
+						break;
 				}
-			})
-			conn.on('error', console.error)
-		})
-	})
+			});
+			conn.on("error", console.error);
+		});
+	});
 
 	let connData: {
 		[id: string]: {
-			label?: string
-			audio?: ArrayBuffer
-		}
-	} = {}
+			label?: string;
+			audio?: ArrayBuffer;
+		};
+	} = {};
 
 	let isPlaying,
-		playheadPos = 0
+		playheadPos = 0;
 </script>
 
 <template lang="pug">
@@ -87,7 +87,15 @@
 	}
 
 	.gradient {
-		background: linear-gradient(to right, #1459ff, #3245ff, #681fff, #8410ff, #a509ff, #c103ff);
+		background: linear-gradient(
+			to right,
+			#1459ff,
+			#3245ff,
+			#681fff,
+			#8410ff,
+			#a509ff,
+			#c103ff
+		);
 		height: 1em;
 	}
 
