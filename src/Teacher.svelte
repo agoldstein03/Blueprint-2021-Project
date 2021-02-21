@@ -1,81 +1,75 @@
 <script lang="ts">
-	// import Track from "./Track.svelte";
-	import Peer from "peerjs";
-	import type { PeerDataType } from "./PeerDataType";
-	import { Label } from "attractions";
+	import Track from './Track.svelte'
+	import Peer from 'peerjs'
+	import type { PeerDataType } from './PeerDataType'
+	import { Label } from 'attractions'
+	import { onMount } from 'svelte'
 
-	export let id: string | undefined;
+	export let id: string | undefined
 
-	const peer = new Peer(/*id*/);
-	console.log({ peer });
-	peer.on("open", (id) => {
-		peer.id = peer.id;
-	});
-	peer.on("error", console.error);
+	const peer = new Peer(/*id*/)
+	console.log({ peer })
+	peer.on('open', (id) => {
+		peer.id = peer.id
+	})
+	peer.on('error', console.error)
 
-	peer.on("connection", (conn) => {
-		console.log({ conn });
-		conn.on("open", () => {});
-		conn.on("data", (data: PeerDataType) => {
-			console.log({ data });
+	peer.on('connection', (conn) => {
+		console.log({ conn })
+		conn.on('open', () => {})
+		conn.on('data', (data: PeerDataType) => {
+			console.log({ data })
 			switch (data.type) {
-				case "label":
-					connData[conn.peer].label = data.label;
-					break;
-				case "audio":
-					connData[conn.peer].audio = data.audio;
-					break;
+				case 'label':
+					connData[conn.peer].label = data.label
+					break
+				case 'audio':
+					connData[conn.peer].audio = data.audio
+					break
 			}
-		});
-		conn.on("error", console.error);
-	});
+		})
+		conn.on('error', console.error)
+	})
 
 	let connData: {
 		[id: string]: {
-			label: string;
-			audio: ArrayBuffer;
-		};
-	} = {};
+			label: string
+			audio: ArrayBuffer
+		}
+	} = {}
+
+	let isPlaying,
+		playheadPos = 0
+	// $: console.log(isPlaying)
 </script>
 
 <template lang="pug">
   body
-    div.header
+    div
       h1.title Harmony
       h2.code a08w9fa
-      h1.thing Joe is Cute
-    div.main
-      
-    p Teacher
-    p {peer.id}
+    div.gradient
+
     +each("Object.entries(connData) as [id, track] (id)")
       Track(label="{track.label}" audio="{track.audio}")
+    Track(label="test" audio="oh no" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")
+    Track(label="test" audio="oh no" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")
 </template>
 
 <style lang="scss">
-	.header {
-		width: 100%;
-		border: 10px;
-		border-color: black;
-		background: white;
-		display: flex;
-		text-align: left;
-		margin: auto;
-		align: left;
-	}
-
 	.code {
-		margin: 0 0 0 0;
-		padding: 0 0 0 0;
-		text-align: left;
+		text-align: center;
 		font-weight: 300;
 		font-style: italic;
-		margin: auto;
+		margin-block-start: 1em;
+		margin-block-end: 1em;
 	}
 
 	.title {
-		margin-left: 2rem;
-		font-size: 4rem;
+		position: absolute;
+		left: 0.4em;
+		top: -0.6em;
+		font-size: 3rem;
 		font-style: italic;
 		background: -webkit-linear-gradient(left, #184cdf, #bc03fc);
 		background-size: 100%;
@@ -85,14 +79,10 @@
 		-moz-text-fill-color: transparent;
 		padding: 0;
 	}
-	.nameheader {
-		text-align: left;
-		align: left;
-	}
 
-	.codesection {
-		text-align: center;
-		align: center;
+	.gradient {
+		background: linear-gradient(to right, #1459ff, #3245ff, #681fff, #8410ff, #a509ff, #c103ff);
+		height: 1em;
 	}
 
 	html,
