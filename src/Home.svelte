@@ -14,9 +14,9 @@
                             Dialog(title='Select Tempo!', closeCallback="{closeCallback}")
                                 div.start-modal
                                     form.formcontainer
-                                        input.tempo-input(type='number' placeholder="Enter the Tempo!")
+                                        input.tempo-input(type='number' placeholder="Enter the Tempo!" bind:value="{tempo}")
                                         input.gradient-button.gradient-button-3(type='button', value='Make My Meeting!', min="10", max="500")
-                                        Slider
+                                        Slider(bind:value="{tempo}", min=10, max = 500)
 
 
     </body>
@@ -25,6 +25,7 @@
 
 <script>  
     let modalOpen = false
+    let tempo = 80
     import Slider from './HorizontalSlider.svelte'
     import { Modal } from 'attractions'
     import { Dialog } from 'attractions'
