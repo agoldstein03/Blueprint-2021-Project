@@ -14,6 +14,7 @@
 		width: 200px;
 		transform: rotate(270deg);
 		border: 0 !important;
+		background-color: #262626;
 		height: 20px;
 		margin-left: -96px;
 		margin-right: -96px;

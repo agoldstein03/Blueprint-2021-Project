@@ -18,10 +18,10 @@
 <style>
     .track {
         height: 200px;
-        border-radius: 16px;
         display: flex;
         align-items: center;
         padding: 16px;
+        background-color: #262626;
     }
     .track-buttons {
         display: block;
