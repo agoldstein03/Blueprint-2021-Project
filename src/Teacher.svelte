@@ -8,9 +8,13 @@
 	import Play from 'svelte-material-icons/Play.svelte'
 	import Pause from 'svelte-material-icons/Pause.svelte'
 
-	export let id: string | undefined
+	export let id: string | undefined, bpm: number
 
 	let peer: Peer | undefined
+
+	function send(conn: Peer.DataConnection, data: PeerDataType) {
+		conn.send(data)
+	}
 
 	onMount(() => {
 		peer = new Peer(id)
@@ -25,6 +29,7 @@
 			conn.on('open', () => {
 				console.log('OPEN!!')
 				connData[conn.peer] = {}
+				send(conn, { type: 'bpm', bpm })
 			})
 			conn.on('data', (data: PeerDataType) => {
 				console.log({ data })
@@ -34,6 +39,8 @@
 						break
 					case 'audio':
 						connData[conn.peer].audio = data.audio
+						break
+					case 'bpm':
 						break
 				}
 			})

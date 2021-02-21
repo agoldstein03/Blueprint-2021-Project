@@ -4,4 +4,7 @@ export type PeerDataType = {
 } | {
     type: "audio",
     audio: ArrayBuffer
+} | {
+    type: "bpm",
+    bpm: number
 }

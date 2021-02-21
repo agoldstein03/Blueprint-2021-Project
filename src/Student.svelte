@@ -10,6 +10,8 @@
 
 	let peer: Peer | undefined;
 	let conn: DataConnection | undefined;
+	let bpm: number | undefined;
+	$: ready = bpm !== undefined;
 
 	onMount(() => {
 		peer = new Peer();
@@ -19,6 +21,17 @@
 			conn.on("error", console.error);
 			conn.on("open", () => {
 				console.log("OPEN");
+			});
+			conn.on("data", (data: PeerDataType) => {
+				console.log({ data });
+				switch (data.type) {
+					case "label":
+					case "audio":
+						break;
+					case "bpm":
+						bpm = data.bpm;
+						break;
+				}
 			});
 			console.log({ conn });
 		});
@@ -93,7 +106,7 @@
 	let mediaPresent = false;
 	let finished = false;
 	let label = "";
-	$: disabled = finished || !mediaPresent || label === "";
+	$: disabled = finished || !mediaPresent || label === "" || !ready;
 	$: {
 		console.log({ finished, mediaPresent, label });
 	}
