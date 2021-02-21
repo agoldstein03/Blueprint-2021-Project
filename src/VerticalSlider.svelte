@@ -1,11 +1,11 @@
 <script>
-	export let min = -10,
-		max = 10
-	export let value
+	export let min = 0,
+		max = 2
+	export let value = 1
 </script>
 
 <template lang="pug">
-    input.vertical(type='range', orient='vertical', bind:value='{value}' name='volume', min='{min}', max='{max}')
+    input.vertical(type='range', orient='vertical', bind:value='{value}' name='volume', min='{min}', max='{max}', step=0.1)
 </template>
 
 <style>

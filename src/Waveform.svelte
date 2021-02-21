@@ -7,7 +7,28 @@
     let peaks
     export const player = {
         play() {
-            if (peaks) {
+            if (!peaks) {
+                $audioContext.resume()
+                const options = {
+                    containers: {
+                        overview: document.querySelector('.waveform'),
+                    },
+                    mediaElement: document.querySelector('audio'),
+                    webAudio: {
+                        audioContext: $audioContext,
+                    },
+                    overviewWaveformColor: 'rgba(255, 255, 255, 1)',
+                    playheadColor: 'rgba(255, 255, 255, 1)',
+                }
+                Peaks.init(options, function (err, instance) {
+                    const view = instance.views.getView('overview');
+                    view.setAmplitudeScale(0.8);
+                    view.fitToContainer()
+                    document.querySelector('.konvajs-content').removeChild(document.getElementsByTagName('canvas')[4])
+                    peaks = instance
+                    peaks.player.play()
+                })
+            } else {
                 peaks.player.play()
             }
         },
@@ -17,32 +38,6 @@
             }
         }
     }
-
-    let initialized = false
-    document.addEventListener('click', () => {
-        if (!initialized) {
-            initialized = true
-            $audioContext.resume()
-            const options = {
-                containers: {
-                    overview: document.querySelector('.waveform'),
-                },
-                mediaElement: document.querySelector('audio'),
-                webAudio: {
-                    audioContext: $audioContext,
-                },
-                overviewWaveformColor: 'rgba(255, 255, 255, 1)',
-                playheadColor: 'rgba(255, 255, 255, 1)',
-            }
-            Peaks.init(options, function (err, instance) {
-                const view = instance.views.getView('overview');
-                view.setAmplitudeScale(0.8);
-                view.fitToContainer()
-                document.querySelector('.konvajs-content').removeChild(document.getElementsByTagName('canvas')[4])
-                peaks = instance
-            })
-        }
-    })
 </script>
 
 <template lang="pug">
@@ -66,5 +61,6 @@
 			#c103ff
 		);
 		border-radius: 16px;
+        height: 100%;
 	}
 </style>

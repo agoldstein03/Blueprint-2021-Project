@@ -46,6 +46,7 @@
 
     let track
     let waveform
+    let source
     let gainNode
 
     export let isPlaying = false
@@ -58,6 +59,12 @@
         track.querySelector('.pause').style.display = 'block'
         track.querySelector('.play').style['padding-bottom'] = '4px'
         track.querySelector('.pause').style['padding-bottom'] = '4px'
+
+        if (!source) {
+            $audioContext.resume();
+            source = $audioContext.createMediaElementSource(document.querySelector('audio'))
+            source.connect(gainNode).connect($audioContext.destination)
+        }
     }
     function pause() {
         waveform.pause()
@@ -77,17 +84,4 @@
         track.querySelector('.mute').style.display = 'block'
         track.querySelector('.unmute').style.display = 'none'
     }
-
-    let source
-    let initialized = false
-    document.addEventListener('click', () => {
-        if (!initialized) {
-            initialized = true
-            $audioContext.resume();
-            console.log($audioContext)
-            source = $audioContext.createMediaElementSource(document.querySelector('audio'))
-            console.log(gainNode)
-            source.connect(gainNode).connect($audioContext.destination)
-        }
-    })
 </script>
