@@ -1,19 +1,33 @@
 <script lang="ts">
-  import Peer from "peerjs";
+  import Peer, { DataConnection, PeerConnectOption } from "peerjs";
   import type { PeerDataType } from "./PeerDataType";
+  import { onMount } from "svelte";
 
   export let id: string;
 
-  const peer = new Peer();
-  peer.on("open", (id) => {
-    peer.id = peer.id;
-  });
-  peer.on("error", console.error);
-  console.log({ peer });
+  let peer: Peer | undefined;
+  let conn: DataConnection | undefined;
 
-  const conn = peer.connect(id, { reliable: true });
-  conn.on("error", console.error);
-  console.log({ conn });
+  onMount(() => {
+    peer = new Peer();
+    peer.on("open", (localId) => {
+      peer.id = peer.id;
+      conn = peer.connect(id, { reliable: true });
+      conn.on("error", console.error);
+      conn.on("open", () => {
+        console.log("OPEN");
+      });
+      console.log({ conn });
+    });
+    peer.on("error", console.error);
+    console.log({ peer });
+
+    peer.on("connection", (conn) => {
+      console.log({ conn });
+      conn.on("open", () => {});
+      conn.on("data", (data: PeerDataType) => {});
+    });
+  });
 
   function send(data: PeerDataType) {
     conn.send(data);
@@ -33,11 +47,7 @@
     });
   }
 
-  peer.on("connection", (conn) => {
-    console.log({ conn });
-    conn.on("open", () => {});
-    conn.on("data", (data: PeerDataType) => {});
-  });
+  console.log(sendLabel);
 
   var timeElapsed = 0;
   var timerID = -1;
@@ -90,7 +100,7 @@
 
 <template lang="pug">
   p Student
-  p {peer.id}
+  p {peer?.id}
   body
     div.background
       div(data-role='controls')
