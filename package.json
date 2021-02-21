@@ -11,6 +11,7 @@
     "@snowpack/plugin-svelte": "^3.5.2",
     "attractions": "^3.1.0",
     "autoprefixer": "^10.2.4",
+    "peaks.js": "^0.23.1",
     "postcss": "^8.2.6",
     "pug": "^3.0.0",
     "rollup": "^2.39.0",

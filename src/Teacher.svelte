@@ -1,9 +1,9 @@
 <template lang="pug">
-	| Teacher
+	Track
 </template>
 
 <script>
-	
+	import Track from './Track.svelte'
 </script>
 
 <style lang="scss">
