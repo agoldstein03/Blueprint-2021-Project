@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte'
 	import { Button } from 'attractions'
 	import Play from 'svelte-material-icons/Play.svelte'
+	import Pause from 'svelte-material-icons/Pause.svelte'
 
 	export let id: string | undefined
 
@@ -55,6 +56,18 @@
 
 	function playAll() {
 		isPlaying = true
+		document.querySelector('.big-play').style.display = 'none'
+		document.querySelector('.big-pause').style.display = 'block'
+		document.querySelector('.big-play').style.padding = '0'
+		document.querySelector('.big-pause').style.padding = '0'
+	}
+
+	function pauseAll() {
+		isPlaying = false
+		document.querySelector('.big-play').style.display = 'block'
+		document.querySelector('.big-pause').style.display = 'none'
+		document.querySelector('.big-play').style.padding = '0'
+		document.querySelector('.big-pause').style.padding = '0'
 	}
 </script>
 
@@ -64,6 +77,8 @@
       h2.code a08w9fa
       Button.big-play(hidden, filled, style="position: absolute; bottom: 3em; right: 3em; background: white; border-radius: 3em; padding: 8px; width: 6em; height: 6em;", on:click!="{playAll}")
         Play(color="{iconColor}", width="{iconSize}", height="{iconSize}")
+      Button.big-pause(hidden, filled, style="display: none; position: absolute; bottom: 3em; right: 3em; background: white; border-radius: 3em; padding: 8px; width: 6em; height: 6em;", on:click!="{pauseAll}")
+        Pause(color="{iconColor}", width="{iconSize}", height="{iconSize}")
     div.gradient
 
     +each("Object.entries(connData) as [id, track] (id)")

@@ -6,7 +6,6 @@
 
     let waveform
     let peaks
-    $: console.log(playheadPos)
     $: if (peaks && playheadPos) peaks.player.seek(playheadPos)
 
     document.addEventListener('click', () => {
@@ -18,8 +17,7 @@
                 },
                 mediaElement: waveform.parentElement.querySelector('audio'),
                 webAudio: {
-                    // audioBuffer: $audioContext.decodeAudioData(arrayBuffer),
-                    audioContext: $audioContext,
+                    audioBuffer: $audioContext.decodeAudioData(arrayBuffer),
                 },
                 overviewWaveformColor: 'rgba(255, 255, 255, 1)',
                 playheadColor: 'rgba(255, 255, 255, 1)',
