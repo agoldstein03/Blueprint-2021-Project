@@ -84,7 +84,7 @@
 <template lang="pug">
     div.bruh
       h1.title Harmony
-      h2.code {window.location.href.slice(window.location.href.indexOf('/create/') + 8, window.location.href.indexOf('/create/') + 16)}
+      h2.code {id}
       Button.big-play(hidden, filled, style="position: absolute; bottom: 3em; right: 3em; background: white; border-radius: 3em; padding: 8px; width: 6em; height: 6em;", on:click!="{playAll}")
         Play(color="{iconColor}", width="{iconSize}", height="{iconSize}")
       Button.big-pause(hidden, filled, style="display: none; position: absolute; bottom: 3em; right: 3em; background: white; border-radius: 3em; padding: 8px; width: 6em; height: 6em;", on:click!="{pauseAll}")
