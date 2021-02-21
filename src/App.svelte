@@ -62,6 +62,7 @@
 		overflow-x: hidden;
 		width: 100%;
 		height: 100%;
+        background-color: #262626;
 	}
 
 	@media only screen and (min-width: 768px) and (max-width: 1280px) {
