@@ -6,7 +6,7 @@
       Route(path='/submit/:id' let:params="{params}")
         Student(id="{params.id}")
       Route(path='/create/:id' let:params="{params}")
-        Teacher(id="{params.id}")
+        Track
 </template>
 
 <script>
@@ -14,7 +14,7 @@
   import { Button, Modal, Dialog } from 'attractions'
   import Home from './Home.svelte'
   import Student from './Student.svelte'
-  import Teacher from './Teacher.svelte'
+  import Track from './Track.svelte'
 
   export let url = '';
 </script>

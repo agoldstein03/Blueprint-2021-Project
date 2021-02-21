@@ -1,5 +1,7 @@
 <template lang="pug">
     div.track(bind:this="{track}")
+        p Label: {label}
+        p Audio: {audio}
         VolumeControl(bind:gainNode="{gainNode}")
         div.track-buttons
             Button.play(hidden, filled, style="background: white; border-radius: 16px; padding: 8px; margin-bottom: 8px;", on:click!="{play}")
@@ -28,6 +30,7 @@
 </style>
 
 <script>
+    import { audioContext } from './store.js'
     import VolumeControl from './VolumeControl.svelte'
     import Waveform from './Waveform.svelte'
     import { Button } from 'attractions'
@@ -36,6 +39,8 @@
     import Headphones from "svelte-material-icons/Headphones.svelte";
     import HeadphonesOff from "svelte-material-icons/HeadphonesOff.svelte";
 
+    export let label, audio;
+    
     let iconColor = "#262626";
     let iconSize = "32px";
 
@@ -72,5 +77,17 @@
         track.querySelector('.mute').style.display = 'block'
         track.querySelector('.unmute').style.display = 'none'
     }
-    $: console.log(gainNode)
+
+    let source
+    let initialized = false
+    document.addEventListener('click', () => {
+        if (!initialized) {
+            initialized = true
+            $audioContext.resume();
+            console.log($audioContext)
+            source = $audioContext.createMediaElementSource(document.querySelector('audio'))
+            console.log(gainNode)
+            source.connect(gainNode).connect($audioContext.destination)
+        }
+    })
 </script>
