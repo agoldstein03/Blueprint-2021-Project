@@ -9,14 +9,15 @@
 </script>
 
 <template lang="pug">
-  Router({url})
-    main
-      Route(path='/')
-        Home
-      Route(path='/submit/:id' let:params="{params}")
-        Student(id="{params.id}")
-      Route(path='/create/:id?bpm=:bpm' let:params="{params}")
-        Teacher(id="{params.id}" bpm="{params.bpm}")
+	Router({url})
+		main
+		Route(path='/')
+			Home
+		Route(path='/submit/:id' let:params="{params}")
+			Student(id="{params.id}")
+		Route(path='/create/:id/:bpm' let:params="{params}")
+			//+debug("params")
+			Teacher(id="{params.id}" bpm="{params.bpm}")
 </template>
 
 <style lang="scss" global>

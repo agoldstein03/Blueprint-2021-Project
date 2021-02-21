@@ -39,7 +39,7 @@
 	Modal(bind:open='{modalOpen}' let:closeCallback="{closeCallback}")
 			Dialog(title='Select Tempo!', closeCallback="{closeCallback}")
 				div.start-modal
-					form.formcontainer(on:submit!="{() => {navigate(`/create/${generateCode()}?bpm=${tempo}`)}}")
+					form.formcontainer(on:submit!="{() => {navigate(`/create/${generateCode()}/${tempo}`)}}")
 						input.tempo-input(type='number' placeholder="Enter the Tempo!" bind:value="{tempo}")
 						input.gradient-button.gradient-button-3(type='submit', value='Make My Meeting!', min="10", max="500")
 						Slider(bind:value="{tempo}", min=10, max = 500)
