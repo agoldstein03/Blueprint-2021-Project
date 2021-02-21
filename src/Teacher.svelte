@@ -5,9 +5,13 @@
 	import { Label } from "attractions";
 	import { onMount } from "svelte";
 
-	export let id: string | undefined;
+	export let id: string | undefined, bpm: number;
 
 	let peer: Peer | undefined;
+
+	function send(conn: Peer.DataConnection, data: PeerDataType) {
+		conn.send(data);
+	}
 
 	onMount(() => {
 		peer = new Peer(id);
@@ -22,6 +26,7 @@
 			conn.on("open", () => {
 				console.log("OPEN!!");
 				connData[conn.peer] = {};
+				send(conn, { type: "bpm", bpm });
 			});
 			conn.on("data", (data: PeerDataType) => {
 				console.log({ data });
