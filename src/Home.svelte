@@ -9,28 +9,23 @@
 </script>
 
 <template lang="pug">
-    <body>
-        div.background
-            Card
-                div.cardformat
-                    h1.title Harmony
-                    div
-                        form.formcontainer
-                            input.form-input(type='text' placeholder="Enter Meeting Code")
-                            input.gradient-button.gradient-button-2(type='button', value='Join')
-                    div.check-in
-                    button.gradient-button.gradient-button-1(on:click!="{() => modalOpen = true}") Create Meeting
-                        Modal(bind:open='{modalOpen}' let:closeCallback="{closeCallback}")
-                            Dialog(title='Select Tempo!', closeCallback="{closeCallback}")
-                                div.start-modal
-                                    form.formcontainer
-                                        input.tempo-input(type='number' placeholder="Enter the Tempo!" bind:value="{tempo}")
-                                        input.gradient-button.gradient-button-3(type='button', value='Make My Meeting!', min="10", max="500")
-                                        Slider(bind:value="{tempo}", min=10, max = 500)
-
-
-    </body>
-
+	div.background
+		Card
+			div.cardformat
+				h1.title Harmony
+				div
+					form.formcontainer
+						input.form-input(type='text' placeholder="Enter Meeting Code")
+						input.gradient-button.gradient-button-2(type='button', value='Join')
+				div.check-in
+				button.gradient-button.gradient-button-1(on:click!="{() => modalOpen = true}") Create Meeting
+	Modal(bind:open='{modalOpen}' let:closeCallback="{closeCallback}")
+			Dialog(title='Select Tempo!', closeCallback="{closeCallback}")
+				div.start-modal
+					form.formcontainer
+						input.tempo-input(type='number' placeholder="Enter the Tempo!" bind:value="{tempo}")
+						input.gradient-button.gradient-button-3(type='button', value='Make My Meeting!', min="10", max="500")
+						Slider(bind:value="{tempo}", min=10, max = 500)
 </template>
 
 <style>

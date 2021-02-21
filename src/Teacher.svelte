@@ -7,40 +7,46 @@
 
 	export let id: string | undefined
 
-	const peer = new Peer(/*id*/)
-	console.log({ peer })
-	peer.on('open', (id) => {
-		peer.id = peer.id
-	})
-	peer.on('error', console.error)
+	let peer: Peer | undefined
 
-	peer.on('connection', (conn) => {
-		console.log({ conn })
-		conn.on('open', () => {})
-		conn.on('data', (data: PeerDataType) => {
-			console.log({ data })
-			switch (data.type) {
-				case 'label':
-					connData[conn.peer].label = data.label
-					break
-				case 'audio':
-					connData[conn.peer].audio = data.audio
-					break
-			}
+	onMount(() => {
+		peer = new Peer(id)
+		console.log({ peer })
+		peer.on('open', (localId) => {
+			peer.id = peer.id
 		})
-		conn.on('error', console.error)
+		peer.on('error', console.error)
+
+		peer.on('connection', (conn) => {
+			console.log({ conn })
+			conn.on('open', () => {
+				console.log('OPEN!!')
+				connData[conn.peer] = {}
+			})
+			conn.on('data', (data: PeerDataType) => {
+				console.log({ data })
+				switch (data.type) {
+					case 'label':
+						connData[conn.peer].label = data.label
+						break
+					case 'audio':
+						connData[conn.peer].audio = data.audio
+						break
+				}
+			})
+			conn.on('error', console.error)
+		})
 	})
 
 	let connData: {
 		[id: string]: {
-			label: string
-			audio: ArrayBuffer
+			label?: string
+			audio?: ArrayBuffer
 		}
 	} = {}
 
 	let isPlaying,
 		playheadPos = 0
-	// $: console.log(isPlaying)
 </script>
 
 <template lang="pug">

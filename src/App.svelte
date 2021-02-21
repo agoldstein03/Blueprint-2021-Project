@@ -4,7 +4,6 @@
 	import Home from "./Home.svelte";
 	import Student from "./Student.svelte";
 	import Teacher from "./Teacher.svelte";
-	import Track from "./Track.svelte";
 
 	export let url = "";
 </script>
@@ -17,7 +16,7 @@
       Route(path='/submit/:id' let:params="{params}")
         Student(id="{params.id}")
       Route(path='/create/:id' let:params="{params}")
-        Teacher
+        Teacher(id="{params.id}")
 </template>
 
 <style lang="scss" global>
@@ -44,5 +43,20 @@
 		main {
 			max-width: none;
 		}
+	}
+
+	html,
+	body {
+		margin: 0 0 0 0;
+		padding: 0 0 0 0;
+		overflow-x: hidden;
+		width: 100%;
+		height: 100%;
+	}
+
+	@media only screen and (min-width: 768px) and (max-width: 1280px) {
+	}
+
+	@media only screen and (min-width: 325px) and (max-width: 768px) {
 	}
 </style>

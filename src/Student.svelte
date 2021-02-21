@@ -1,7 +1,10 @@
 <script lang="ts">
+	import { audioContext } from "./store.js";
+	import { TextField } from "attractions";
 	import Peer, { DataConnection, PeerConnectOption } from "peerjs";
-	import type { PeerDataType } from "./PeerDataType";
 	import { onMount } from "svelte";
+	import type { PeerDataType } from "./PeerDataType";
+	/// <reference types="dom-mediacapture-record" />
 
 	export let id: string;
 
@@ -49,28 +52,27 @@
 
 	console.log(sendLabel);
 
-	var timeElapsed = 0;
-	var timerID = -1;
+	let timeStart: number | undefined;
+	let timerID: number | undefined;
 	var recording = false;
+	let min = "00";
+	let sec = "00";
 
 	function check() {
-		if (recording == true) {
-			stop();
-		} else {
+		recording = !recording;
+		if (recording) {
 			console.log("entered");
 			start();
+		} else {
+			stop();
+			finished = true;
 		}
 	}
 
 	function tick() {
-		timeElapsed++;
-		var min = timeElapsed / 60;
-		var sec = timeElapsed % 60;
-		min = Math.floor(min);
-		min = pad(min);
-		sec = pad(sec);
-		document.getElementById("minutes").innerHTML = min;
-		document.getElementById("seconds").innerHTML = sec;
+		let timeElapsed = Math.floor((Date.now() - timeStart) / 1000);
+		min = pad(Math.floor(timeElapsed / 60));
+		sec = pad(timeElapsed % 60);
 	}
 
 	function pad(n) {
@@ -78,123 +80,148 @@
 	}
 
 	function start() {
-		recording = true;
-		if (timerID == -1) {
-			timerID = setInterval(tick, 1000);
-		}
+		timeStart = Date.now();
+		timerID = window.setInterval(tick, 100);
 	}
 
 	function stop() {
 		console.log("stopped");
-		if (timerID != -1) {
-			clearInterval(timerID);
-			timerID = -1;
-		}
+		mediaRecorder.stop();
+		clearInterval(timerID);
 	}
 
-	function reset() {
-		timeElapsed = -1;
-		tick();
+	let mediaPresent = false;
+	let finished = false;
+	let label = "";
+	$: disabled = finished || !mediaPresent || label === "";
+	$: {
+		console.log({ finished, mediaPresent, label });
 	}
+	let mediaRecorder: MediaRecorder | undefined;
+
+	navigator.mediaDevices
+		.getUserMedia({ audio: true })
+		.then((media) => {
+			mediaPresent = true;
+			return new Promise((resolve) => {
+				mediaRecorder = new MediaRecorder(media);
+				mediaRecorder.ondataavailable = ({ data }) => {
+					resolve(data);
+				};
+				mediaRecorder.start();
+			});
+		})
+		.then((blob: Blob) => blob.arrayBuffer())
+		//.then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer));
+		.then((arrayBuffer) => {
+			sendLabel(label);
+			sendAudio(arrayBuffer);
+			console.log({ label, arrayBuffer });
+		});
 </script>
 
 <template lang="pug">
-  p Student
-  p {peer?.id}
-  body
-    div.background
-      div(data-role='controls')
-        button(on:click!="{check}") Record
-        h1.time
-          span#minutes 00
-          span :
-          span#seconds 00
-  body
+	p Student
+	p {peer?.id}
+	.background
+		.text
+			TextField(outline label="Label" bind:value="{label}" disabled="{recording || finished}")
+		div(data-role='controls')
+			.shadow(class:round="{!recording}" class:square="{recording}")
+				button(on:click!="{check}" title="Record" disabled="{disabled}")
+		h1.time
+			span#minutes {min}
+			span :
+			span#seconds {sec}
 </template>
 
-<style>
-	.time {
-		color: white;
-	}
+<style lang="scss">
+	@use './theme/theme.scss';
+	@use 'sass:color';
 
-	[data-role="controls"] > button {
-		margin: 50px auto;
-		outline: none;
-		display: block;
-		border: none;
-		background-color: #d9afd9;
-		background-image: -webkit-gradient(
-			linear,
-			left bottom,
-			left top,
-			from(#184cdf),
-			to(#bc03fc)
-		);
-		background-image: -o-linear-gradient(
-			bottom,
-			#184cdf 0%,
-			#7514fe 50%,
-			#bc03fc 100%
-		);
-		background-image: linear-gradient(
-			0deg,
-			#184cdf 0%,
-			#7514fe 50%,
-			#bc03fc 100%
-		);
-		width: 100px;
-		height: 100px;
-		border-radius: 50%;
-		text-indent: -1000em;
-		cursor: pointer;
-		-webkit-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.3) inset,
-			0px 0px 0px 30px #fff, 0px 0px 0px 35px #333;
-		box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.3) inset, 0px 0px 0px 30px #fff,
-			0px 0px 0px 35px #333;
-	}
-	[data-role="controls"] > button:hover {
-		background-color: #ee7bee;
-		background-image: -webkit-gradient(
-			linear,
-			left bottom,
-			left top,
-			from(#1311bc),
-			to(#6f00bc)
-		);
-		background-image: -o-linear-gradient(
-			bottom,
-			#1311bc 0%,
-			#4101bc 50%,
-			#6f00bc 100%
-		);
-		background-image: linear-gradient(
-			0deg,
-			#1311bc 0%,
-			#4101bc 50%,
-			#6f00bc 100%
-		);
+	$buttonLeft: #184cdf;
+	$buttonRight: #bc03fc;
+	$hoverDarkness: 30%;
+	$disabledDesaturation: 75%;
+
+	$buttonDiameterRound: 7em;
+	$buttonLengthSquare: 6em;
+	$buttonDiff: $buttonDiameterRound - $buttonLengthSquare;
+
+	$buttonShadowRadius: 3em;
+	$timeMargin: 1em;
+
+	$oneMinusSqrt2: 0.41421356237;
+
+	@mixin makeGradient($start, $end, $direction: to right) {
+		background-color: color.mix($start, $end);
+		background-image: linear-gradient($direction, $start, $end);
 	}
 
 	.background {
 		background: #262626;
 		height: 100vh;
 		display: flex;
+		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 	}
 
-	html,
-	body {
-		margin: 0 0 0 0;
-		padding: 0 0 0 0;
-		overflow-x: hidden;
-		width: 100%;
-		height: 100%;
+	.text {
+		padding-bottom: 1em;
 	}
 
-	@media only screen and (min-width: 768px) and (max-width: 1280px) {
+	button {
+		display: block;
+		outline: none;
+		border: none;
+		@include makeGradient($buttonLeft, $buttonRight);
+
+		&:hover {
+			&:not([disabled]) {
+				@include makeGradient(
+					color.scale($buttonLeft, $lightness: -$hoverDarkness),
+					color.scale($buttonRight, $lightness: -$hoverDarkness)
+				);
+				cursor: pointer;
+			}
+		}
+
+		&[disabled] {
+			@include makeGradient(
+				color.scale($buttonLeft, $saturation: -$disabledDesaturation),
+				color.scale($buttonRight, $saturation: -$disabledDesaturation)
+			);
+			cursor: not-allowed;
+		}
+
+		.round > & {
+			width: $buttonDiameterRound;
+			height: $buttonDiameterRound;
+			margin: $buttonShadowRadius + $timeMargin auto;
+			border-radius: 50%;
+		}
+
+		.square > & {
+			width: $buttonLengthSquare;
+			height: $buttonLengthSquare;
+			margin: $buttonShadowRadius + $timeMargin + $buttonDiff / 2 auto;
+		}
 	}
 
-	@media only screen and (min-width: 325px) and (max-width: 768px) {
+	.shadow {
+		border-radius: 50%;
+		//box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.3) inset, 0px 0px 0px 40px #fff, 0px 0px 0px 35px #333;
+		&.round {
+			box-shadow: 0 0 0 $buttonShadowRadius #fff;
+		}
+		&.square {
+			box-shadow: 0 0 0 $buttonShadowRadius + ($buttonDiff * $oneMinusSqrt2)
+				#fff;
+		}
+	}
+
+	.time {
+		color: white;
 	}
 </style>
