@@ -12,7 +12,7 @@
   Router({url})
     main
       Route(path='/')
-        Student
+        Home
       Route(path='/submit/:id' let:params="{params}")
         Student(id="{params.id}")
       Route(path='/create/:id' let:params="{params}")
