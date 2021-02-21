@@ -4,7 +4,7 @@
         p Audio: {audio}
         VolumeControl(bind:gainNode="{gainNode}")
         div.track-buttons
-            Button.play(hidden, filled, style="background: white; border-radius: 16px; padding: 8px; padding-bottom: 4px; margin-bottom: 8px;", on:click!="{startPlaying}")
+            Button.play(hidden, filled, style="background: white; border-radius: 16px; padding: 8px; padding-bottom: 4px; margin-bottom: 8px;", on:click!="{play}")
                 Play(color="{iconColor}", width="{iconSize}", height="{iconSize}")
             Button.pause(filled, style="display: none; background: white; border-radius: 16px; padding: 8px; padding-bottom: 4px; margin-bottom: 8px;", on:click!="{stopPlaying}")
                 Pause(color="{iconColor}", width="{iconSize}", height="{iconSize}")
@@ -12,7 +12,7 @@
                 Headphones(color="{iconColor}", width="{iconSize}", height="{iconSize}")
             Button.unmute(filled, style="display: none; background: white; padding: 8px; border-radius: 16px;", on:click!="{unmute}")
                 HeadphonesOff(color="{iconColor}", width="{iconSize}", height="{iconSize}")
-        Waveform(bind:player="{waveform}" bind:playheadPos="{playheadPos}")
+        Waveform(bind:player="{waveform}" bind:playheadPos="{playheadPos}" bind:arrayBuffer="{audio}")
 </template>
 
 <style>
@@ -55,24 +55,28 @@
     $: if (waveform && isPlaying) play()
     $: if (waveform && !isPlaying) pause()
 
-    function startPlaying() {
-        isPlaying = true
-    }
     function stopPlaying() {
-        isPlaying = false
+        if (!isPlaying) {
+            pause()
+        } else {
+            isPlaying = false
+        }
     }
 
     function play() {
-        waveform.play()
-        track.querySelector('.play').style.display = 'none'
-        track.querySelector('.pause').style.display = 'block'
+        if (waveform.play()) {
+            track.querySelector('.play').style.display = 'none'
+            track.querySelector('.pause').style.display = 'block'
 
-        if (!source) {
-            $audioContext.resume();
-            source = $audioContext.createMediaElementSource(track.querySelector('audio'))
-            source.connect(gainNode).connect($audioContext.destination)
-            muteNode = $audioContext.createGain()
-            muteNode.gain.value = 0
+            if (!source) {
+                $audioContext.resume();
+                source = $audioContext.createMediaElementSource(track.querySelector('audio'))
+                source.connect(gainNode).connect($audioContext.destination)
+                muteNode = $audioContext.createGain()
+                muteNode.gain.value = 0
+            }
+        } else {
+            isPlaying = false
         }
     }
     function pause() {
