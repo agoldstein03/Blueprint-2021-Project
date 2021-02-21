@@ -1,8 +1,8 @@
 <script>
-    import Peaks from 'peaks.js'
-    import { audioContext } from './store.js'
+	import Peaks from "peaks.js";
+	import { audioContext } from "./store.js";
 
-    export let audioBuffer
+	export let audioBuffer;
 
     let peaks
     export const player = {
@@ -54,9 +54,17 @@
 </template>
 
 <style>
-    .waveform {
-        flex-grow: 1;
-        background: linear-gradient(to right, #1459ff, #3245ff, #681fff, #8410ff, #a509ff, #c103ff);
-        border-radius: 16px;
-    }
+	.waveform {
+		flex-grow: 1;
+		background: linear-gradient(
+			to right,
+			#1459ff,
+			#3245ff,
+			#681fff,
+			#8410ff,
+			#a509ff,
+			#c103ff
+		);
+		border-radius: 16px;
+	}
 </style>
