@@ -1,7 +1,6 @@
 <template lang="pug">
     div.track(bind:this="{track}")
-        p Label: {label}
-        p Audio: {audio}
+        p.track-label {label}
         VolumeControl(bind:gainNode="{gainNode}")
         div.track-buttons
             Button.play(hidden, filled, style="background: white; border-radius: 16px; padding: 8px; padding-bottom: 4px; margin-bottom: 8px;", on:click!="{play}")
@@ -22,6 +21,12 @@
         align-items: center;
         padding: 16px;
         background-color: #262626;
+    }
+    .track-label {
+        color: white;
+        transform: rotate(270deg);
+        transform-origin: left;
+        font-size: 18px;
     }
     .track-buttons {
         display: block;
