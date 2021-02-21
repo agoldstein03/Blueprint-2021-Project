@@ -14,11 +14,9 @@
         width: 200px;
         transform: rotate(270deg);
         border: 0 !important;
-        height: 36px;
-        margin-left: -82px;
-        margin-top: 82px;
-        margin-right: -82px;
-        margin-bottom: -118px;
+        height: 20px;
+        margin-left: -96px;
+        margin-right: -96px;
         padding: 0;
     }
     input[type='range']:focus {

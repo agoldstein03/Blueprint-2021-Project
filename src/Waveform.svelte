@@ -4,25 +4,44 @@
 
     export let audioBuffer
 
-    document.addEventListener('click', () => {
-        $audioContext.resume()
-        const options = {
-            containers: {
-                overview: document.querySelector('.waveform'),
-            },
-            mediaElement: document.querySelector('audio'),
-            webAudio: {
-                audioContext: $audioContext,
-            },
-            overviewWaveformColor: 'rgba(255, 255, 255, 1)',
-            playheadColor: 'rgba(255, 255, 255, 1)',
+    let peaks
+    export const player = {
+        play() {
+            if (peaks) {
+                peaks.player.play()
+            }
+        },
+        pause() {
+            if (peaks) {
+                peaks.player.pause()
+            }
         }
-        Peaks.init(options, function (err, peaks) {
-            const view = peaks.views.getView('overview');
-            view.setAmplitudeScale(0.8);
-            view.fitToContainer()
-            document.querySelector('.konvajs-content').removeChild(document.getElementsByTagName('canvas')[4])
-        })
+    }
+
+    let initialized = false
+    document.addEventListener('click', () => {
+        if (!initialized) {
+            initialized = true
+            $audioContext.resume()
+            const options = {
+                containers: {
+                    overview: document.querySelector('.waveform'),
+                },
+                mediaElement: document.querySelector('audio'),
+                webAudio: {
+                    audioContext: $audioContext,
+                },
+                overviewWaveformColor: 'rgba(255, 255, 255, 1)',
+                playheadColor: 'rgba(255, 255, 255, 1)',
+            }
+            Peaks.init(options, function (err, instance) {
+                const view = instance.views.getView('overview');
+                view.setAmplitudeScale(0.8);
+                view.fitToContainer()
+                document.querySelector('.konvajs-content').removeChild(document.getElementsByTagName('canvas')[4])
+                peaks = instance
+            })
+        }
     })
 </script>
 
