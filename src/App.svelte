@@ -15,8 +15,8 @@
         Home
       Route(path='/submit/:id' let:params="{params}")
         Student(id="{params.id}")
-      Route(path='/create/:id' let:params="{params}")
-        Teacher(id="{params.id}")
+      Route(path='/create/:id?bpm=:bpm' let:params="{params}")
+        Teacher(id="{params.id}" bpm="{params.bpm}")
 </template>
 
 <style lang="scss" global>

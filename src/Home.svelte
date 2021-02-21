@@ -1,11 +1,28 @@
 <script>
+	import Slider from "./HorizontalSlider.svelte";
+	import { Modal, Dialog, Card, Button } from "attractions";
+	import { navigate } from "svelte-routing";
+
 	let modalOpen = false;
 	let tempo = 80;
-	import Slider from "./HorizontalSlider.svelte";
-	import { Modal } from "attractions";
-	import { Dialog } from "attractions";
-	import { Card } from "attractions";
-	import { Button } from "attractions";
+	let joinCode = "";
+
+	function generateCode(length = 8) {
+		function mapToRange(num) {
+			if (num < 10) {
+				return 48 + num;
+			} else if (num < 36) {
+				return 65 + num - 10;
+			} else {
+				return 97 + num - 36;
+			}
+		}
+		let codes = [];
+		for (let i = 0; i < length; i++) {
+			codes.push(mapToRange(Math.floor(Math.random() * 62)));
+		}
+		return String.fromCharCode(...codes);
+	}
 </script>
 
 <template lang="pug">
@@ -14,21 +31,30 @@
 			div.cardformat
 				h1.title Harmony
 				div
-					form.formcontainer
-						input.form-input(type='text' placeholder="Enter Meeting Code")
-						input.gradient-button.gradient-button-2(type='button', value='Join')
-				div.check-in
-				button.gradient-button.gradient-button-1(on:click!="{() => modalOpen = true}") Create Meeting
+					form.formcontainer(on:submit!="{() => {navigate(`/submit/${joinCode}`)}}")
+						input.form-input(bind:value="{joinCode}" type='text' placeholder="Enter Meeting Code")
+						input.gradient-button.gradient-button-2(type="submit" disabled="{joinCode === ''}" value='Join')
+				//div.check-in
+				button.gradient-button.gradient-button-1(on:click!="{() => {modalOpen = true}}") Create Meeting
 	Modal(bind:open='{modalOpen}' let:closeCallback="{closeCallback}")
 			Dialog(title='Select Tempo!', closeCallback="{closeCallback}")
 				div.start-modal
-					form.formcontainer
+					form.formcontainer(on:submit!="{() => {navigate(`/create/${generateCode()}?bpm=${tempo}`)}}")
 						input.tempo-input(type='number' placeholder="Enter the Tempo!" bind:value="{tempo}")
-						input.gradient-button.gradient-button-3(type='button', value='Make My Meeting!', min="10", max="500")
+						input.gradient-button.gradient-button-3(type='submit', value='Make My Meeting!', min="10", max="500")
 						Slider(bind:value="{tempo}", min=10, max = 500)
 </template>
 
-<style>
+<style lang="scss">
+	@use 'sass:color';
+
+	$disabledDesaturation: 85%;
+
+	@mixin makeGradient($start, $end, $direction: to right) {
+		background-color: color.mix($start, $end);
+		background-image: linear-gradient($direction, $start, $end);
+	}
+
 	.title {
 		font-size: 7rem;
 		font-style: italic;
@@ -138,6 +164,13 @@
 		text-decoration: none;
 		width: 100px;
 		font-size: 1.5rem;
+		&[disabled] {
+			@include makeGradient(
+				color.scale(#8410ff, $saturation: -$disabledDesaturation),
+				color.scale(#c103ff, $saturation: -$disabledDesaturation)
+			);
+			cursor: not-allowed;
+		}
 	}
 	.gradient-button-2:hover {
 		background-position: right center;
