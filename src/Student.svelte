@@ -106,7 +106,7 @@
 	let mediaPresent = false;
 	let finished = false;
 	let label = "";
-	$: disabled = finished || !mediaPresent || label === "" || !ready;
+	$: disabled = finished || !mediaPresent || label === "" /*|| !ready*/;
 	$: {
 		console.log({ finished, mediaPresent, label });
 	}
