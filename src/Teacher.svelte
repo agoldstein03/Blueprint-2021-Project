@@ -79,9 +79,9 @@
 </script>
 
 <template lang="pug">
-    div
+    div.bruh
       h1.title Harmony
-      h2.code {id}
+      h2.code {window.location.href.slice(window.location.href.indexOf('/create/') + 8, window.location.href.indexOf('/create/') + 16)}
       Button.big-play(hidden, filled, style="position: absolute; bottom: 3em; right: 3em; background: white; border-radius: 3em; padding: 8px; width: 6em; height: 6em;", on:click!="{playAll}")
         Play(color="{iconColor}", width="{iconSize}", height="{iconSize}")
       Button.big-pause(hidden, filled, style="display: none; position: absolute; bottom: 3em; right: 3em; background: white; border-radius: 3em; padding: 8px; width: 6em; height: 6em;", on:click!="{pauseAll}")
@@ -90,8 +90,10 @@
 
     +each("Object.entries(connData) as [trackId, track] (trackId)")
       Track(label="{track.label}" audio="{track.audio}")
-    Track(label="test" audio="oh no" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")
-    Track(label="test" audio="oh no" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")
+    //- Track(label="test" audio="oh no" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")
+    //- Track(label="test" audio="oh no" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")
+
+    div.rest
 </template>
 
 <style lang="scss">
@@ -99,8 +101,11 @@
 		text-align: center;
 		font-weight: 300;
 		font-style: italic;
-		margin-block-start: 1em;
-		margin-block-end: 1em;
+		padding-block-start: 1em;
+		padding-block-end: 1em;
+		margin-block-start: 0em;
+		margin-block-end: 0em;
+		background-color: white;
 	}
 
 	.title {
@@ -121,6 +126,10 @@
 	.gradient {
 		background: linear-gradient(to right, #1459ff, #3245ff, #681fff, #8410ff, #a509ff, #c103ff);
 		height: 1em;
+	}
+
+	.rest {
+		background-color: #262626;
 	}
 
 	html,
