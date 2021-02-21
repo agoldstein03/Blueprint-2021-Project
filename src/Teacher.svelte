@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Track from "./Track.svelte";
+	//import Track from "./Track.svelte";
 	import Peer from "peerjs";
 	import type { PeerDataType } from "./PeerDataType";
 	import { Label } from "attractions";
@@ -57,7 +57,7 @@
     p Teacher
     p {peer.id}
     +each("Object.entries(connData) as [id, track] (id)")
-      Track(label="{track.label}" audio="{track.audio}")
+      //Track(label="{track.label}" audio="{track.audio}")
 </template>
 
 <style lang="scss">
