@@ -125,10 +125,10 @@
 	p {peer?.id}
 	.background
 		.text
-		TextField(outline label="Label" bind:value="{label}" disabled="{recording || finished}")
+			TextField(outline label="Label" bind:value="{label}" disabled="{recording || finished}")
 		div(data-role='controls')
-		div.shadow(class:round="{!recording}" class:square="{recording}")
-			button(on:click!="{check}" title="Record" disabled="{disabled}")
+			.shadow(class:round="{!recording}" class:square="{recording}")
+				button(on:click!="{check}" title="Record" disabled="{disabled}")
 		h1.time
 			span#minutes {min}
 			span :
