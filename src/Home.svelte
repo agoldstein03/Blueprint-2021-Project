@@ -32,6 +32,8 @@
 	.title {
 		font-size: 7rem;
 		font-style: italic;
+		padding-right: 1rem;
+		padding-left: 1rem;
 		background: -webkit-linear-gradient(left, #184cdf, #bc03fc);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
@@ -72,8 +74,8 @@
 		font-size: 1.5rem;
 		margin-top: 10px;
 		margin-bottom: 30px;
-		margin-right: 3rem;
-		padding: 10px 10px;
+		margin-right: 1rem;
+		padding: 12px 12px;
 		width: 60%;
 		background: rgba(38, 38, 38, 1);
 		color: white;
