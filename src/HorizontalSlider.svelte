@@ -10,13 +10,13 @@
 <style>
     input[type='range'] {
         -webkit-appearance: none;
-        width: 200px;
+        width: 40%;
     }
     input[type='range']:focus {
         outline: none;
     }
     input[type='range']::-webkit-slider-runnable-track {
-        width: 200px;
+        width: 40%;
         height: 3px;
         cursor: pointer;
         background: gray;

@@ -1,6 +1,4 @@
-<template lang="pug">
-	| Student
-   
+<template lang="pug">   
 </template>
 
 <script>

@@ -16,7 +16,7 @@
                                     form.formcontainer
                                         input.tempo-input(type='number' placeholder="Enter the Tempo!")
                                         input.gradient-button.gradient-button-3(type='button', value='Make My Meeting!', min="10", max="500")
-                                    
+                                        Slider
 
 
     </body>
@@ -24,8 +24,8 @@
 </template>
 
 <script>  
-    let count = 0
     let modalOpen = false
+    import Slider from './HorizontalSlider.svelte'
     import { Modal } from 'attractions'
     import { Dialog } from 'attractions'
     import { Card } from 'attractions'
