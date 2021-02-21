@@ -127,7 +127,7 @@
 		.text
 			h1.record-title Enter a Label Below to Record!
 			form.formcontainer
-				input.form-input(placeholder="Label Here!" bind:value="{label}" disabled="{recording || finished}")
+				input.form-input(placeholder="Label" bind:value="{label}" disabled="{recording || finished}")
 		div(data-role='controls')
 			.shadow(class:round="{!recording}" class:square="{recording}")
 				button(on:click!="{check}" title="Record" disabled="{disabled}")
@@ -251,7 +251,7 @@
 		width: 60%;
 		background: rgba(38, 38, 38, 1);
 		color: white;
-		border: 1px solid rgba(255, 255, 255, 0.5);
+		border: 1px solid rgba(255, 255, 255, 1);
 		border-radius: 20px;
 	}
 </style>
