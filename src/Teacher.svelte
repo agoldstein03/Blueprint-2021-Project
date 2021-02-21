@@ -68,12 +68,12 @@
 <template lang="pug">
     div
       h1.title Harmony
-      h2.code a08w9fa
+      h2.code {id}
       Button.big-play(hidden, filled, style="position: absolute; bottom: 3em; right: 3em; background: white; border-radius: 3em; padding: 8px; width: 6em; height: 6em;", on:click!="{playAll}")
         Play(color="{iconColor}", width="{iconSize}", height="{iconSize}")
     div.gradient
 
-    +each("Object.entries(connData) as [id, track] (id)")
+    +each("Object.entries(connData) as [trackId, track] (trackId)")
       Track(label="{track.label}" audio="{track.audio}")
     Track(label="test" audio="oh no" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")
     Track(label="test" audio="oh no" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")

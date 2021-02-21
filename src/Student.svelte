@@ -4,6 +4,7 @@
 	import Peer, { DataConnection, PeerConnectOption } from "peerjs";
 	import { onMount } from "svelte";
 	import type { PeerDataType } from "./PeerDataType";
+	import Metronome from "./metronome.svelte";
 	/// <reference types="dom-mediacapture-record" />
 
 	export let id: string;
@@ -72,6 +73,7 @@
 	let sec = "00";
 
 	function check() {
+		met.toggle();
 		recording = !recording;
 		if (recording) {
 			console.log("entered");
@@ -131,9 +133,11 @@
 			sendAudio(arrayBuffer);
 			console.log({ label, arrayBuffer });
 		});
+	let met;
 </script>
 
 <template lang="pug">
+	Metronome(bind:this="{met}" tempo="{bpm}")
 	//- p Student
 	//- p {peer?.id}
 	.background
