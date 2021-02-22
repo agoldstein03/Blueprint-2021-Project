@@ -99,6 +99,7 @@
 
 	function start() {
 		timeStart = Date.now()
+		mediaRecorder.start()
 		timerID = window.setInterval(tick, 100)
 	}
 
@@ -126,7 +127,6 @@
 				mediaRecorder.ondataavailable = ({ data }) => {
 					resolve(data)
 				}
-				mediaRecorder.start()
 			})
 		})
 		.then((blob: Blob) => blob.arrayBuffer())

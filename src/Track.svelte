@@ -24,8 +24,11 @@
     }
     .track-label {
         color: white;
-        transform: rotate(270deg);
+        text-orientation: sideways-right;
         font-size: 18px;
+        writing-mode: vertical-lr;
+        transform: rotate(180deg);
+        margin-block-start: 0;
     }
     .track-buttons {
         display: block;
