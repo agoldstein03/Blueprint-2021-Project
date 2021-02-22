@@ -11,7 +11,7 @@
                 Headphones(color="{iconColor}", width="{iconSize}", height="{iconSize}")
             Button.unmute(filled, style="display: none; background: white; padding: 8px; border-radius: 16px;", on:click!="{unmute}")
                 HeadphonesOff(color="{iconColor}", width="{iconSize}", height="{iconSize}")
-        //- Waveform(bind:player="{waveform}" bind:playheadPos="{playheadPos}" bind:arrayBuffer="{audio}")
+        Waveform(bind:player="{waveform}" bind:playheadPos="{playheadPos}" bind:arrayBuffer="{audio}")
 </template>
 
 <style>
@@ -25,7 +25,6 @@
     .track-label {
         color: white;
         transform: rotate(270deg);
-        transform-origin: left;
         font-size: 18px;
     }
     .track-buttons {
@@ -69,35 +68,29 @@
     }
 
     function play() {
-        // if (waveform.play()) {
+        if (waveform.play()) {
             track.querySelector('.play').style.display = 'none'
             track.querySelector('.pause').style.display = 'block'
 
             if (!source) {
                 $audioContext.resume();
-                // source = $audioContext.createMediaElementSource(track.querySelector('audio'))
-                source = $audioContext.createBufferSource()    
-                $audioContext.decodeAudioData(audio.buffer).then(audioBuffer => {
-                    source.buffer = audioBuffer
-                    source.connect(gainNode).connect($audioContext.destination)
-                    muteNode = $audioContext.createGain()
-                    muteNode.gain.value = 0
-                    console.log('here')
-                    source.start()
-                })
+                source = $audioContext.createMediaElementSource(track.querySelector('audio'))
+                source.connect(gainNode).connect($audioContext.destination)
+                muteNode = $audioContext.createGain()
+                muteNode.gain.value = 0
             }
-        // } else {
-        //     isPlaying = false
-        // }
+        } else {
+            isPlaying = false
+        }
     }
     function pause() {
-        // waveform.pause()
+        waveform.pause()
         track.querySelector('.play').style.display = 'block'
         track.querySelector('.pause').style.display = 'none'
     }
 
     function mute() {
-        // waveform.grayout(true)
+        waveform.grayout(true)
         isMuted = true
         track.querySelector('.mute').style.display = 'none'
         track.querySelector('.unmute').style.display = 'block'
@@ -110,7 +103,7 @@
         }
     }
     function unmute() {
-        // waveform.grayout(false)
+        waveform.grayout(false)
         isMuted = false
         track.querySelector('.mute').style.display = 'block'
         track.querySelector('.unmute').style.display = 'none'

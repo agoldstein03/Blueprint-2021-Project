@@ -1,139 +1,139 @@
 <script lang="ts">
-	import { audioContext } from "./store.js";
-	import { TextField } from "attractions";
-	import Peer, { DataConnection, PeerConnectOption } from "peerjs";
-	import { onMount } from "svelte";
-	import type { PeerDataType } from "./PeerDataType";
-	import Metronome from "./metronome.svelte";
+	import { audioContext } from './store.js'
+	import { TextField } from 'attractions'
+	import Peer, { DataConnection, PeerConnectOption } from 'peerjs'
+	import { onMount } from 'svelte'
+	import type { PeerDataType } from './PeerDataType'
+	import Metronome from './metronome.svelte'
 	/// <reference types="dom-mediacapture-record" />
 
-	export let id: string;
+	export let id: string
 
-	let peer: Peer | undefined;
-	let conn: DataConnection | undefined;
-	let bpm: number | undefined;
-	$: ready = bpm !== undefined;
+	let peer: Peer | undefined
+	let conn: DataConnection | undefined
+	let bpm: number | undefined
+	$: ready = bpm !== undefined
 
 	onMount(() => {
-		peer = new Peer();
-		peer.on("open", (localId) => {
+		peer = new Peer()
+		peer.on('open', (localId) => {
 			//peer.id = peer.id;
-			conn = peer.connect(id, { reliable: true });
-			conn.on("error", console.error);
-			conn.on("open", () => {
-				console.log("OPEN");
-			});
-			conn.on("data", (data: PeerDataType) => {
-				console.log({ data });
+			conn = peer.connect(id, { reliable: true })
+			conn.on('error', console.error)
+			conn.on('open', () => {
+				console.log('OPEN')
+			})
+			conn.on('data', (data: PeerDataType) => {
+				console.log({ data })
 				switch (data.type) {
-					case "label":
-					case "audio":
-						break;
-					case "bpm":
-						bpm = data.bpm;
-						break;
+					case 'label':
+					case 'audio':
+						break
+					case 'bpm':
+						bpm = data.bpm
+						break
 				}
-			});
-			console.log({ conn });
-		});
-		peer.on("error", console.error);
-		console.log({ peer });
+			})
+			console.log({ conn })
+		})
+		peer.on('error', console.error)
+		console.log({ peer })
 
-		peer.on("connection", (conn) => {
-			console.log({ conn });
-			conn.on("open", () => {});
-			conn.on("data", (data: PeerDataType) => {});
-		});
-	});
+		peer.on('connection', (conn) => {
+			console.log({ conn })
+			conn.on('open', () => {})
+			conn.on('data', (data: PeerDataType) => {})
+		})
+	})
 
 	function send(data: PeerDataType) {
-		conn.send(data);
+		conn.send(data)
 	}
 
 	function sendAudio(audio: ArrayBuffer) {
 		send({
-			type: "audio",
-			audio: new Int8Array(audio),
-		});
+			type: 'audio',
+			audio: audio,
+		})
 	}
 
 	function sendLabel(label: string) {
 		send({
-			type: "label",
+			type: 'label',
 			label,
-		});
+		})
 	}
 
-	console.log(sendLabel);
+	console.log(sendLabel)
 
-	let timeStart: number | undefined;
-	let timerID: number | undefined;
-	var recording = false;
-	let min = "00";
-	let sec = "00";
+	let timeStart: number | undefined
+	let timerID: number | undefined
+	var recording = false
+	let min = '00'
+	let sec = '00'
 
 	function check() {
-		met.toggle();
-		recording = !recording;
+		met.toggle()
+		recording = !recording
 		if (recording) {
-			console.log("entered");
-			start();
+			console.log('entered')
+			start()
 		} else {
-			stop();
-			finished = true;
+			stop()
+			finished = true
 		}
 	}
 
 	function tick() {
-		let timeElapsed = Math.floor((Date.now() - timeStart) / 1000);
-		min = pad(Math.floor(timeElapsed / 60));
-		sec = pad(timeElapsed % 60);
+		let timeElapsed = Math.floor((Date.now() - timeStart) / 1000)
+		min = pad(Math.floor(timeElapsed / 60))
+		sec = pad(timeElapsed % 60)
 	}
 
 	function pad(n) {
-		return n < 10 ? "0" + n : n;
+		return n < 10 ? '0' + n : n
 	}
 
 	function start() {
-		timeStart = Date.now();
-		timerID = window.setInterval(tick, 100);
+		timeStart = Date.now()
+		timerID = window.setInterval(tick, 100)
 	}
 
 	function stop() {
-		console.log("stopped");
-		mediaRecorder.stop();
-		clearInterval(timerID);
+		console.log('stopped')
+		mediaRecorder.stop()
+		clearInterval(timerID)
 	}
 
-	let mediaPresent = false;
-	let finished = false;
-	let label = "";
-	$: disabled = finished || !mediaPresent || label === "" /*|| !ready*/;
+	let mediaPresent = false
+	let finished = false
+	let label = ''
+	$: disabled = finished || !mediaPresent || label === '' /*|| !ready*/
 	$: {
-		console.log({ finished, mediaPresent, label });
+		console.log({ finished, mediaPresent, label })
 	}
-	let mediaRecorder: MediaRecorder | undefined;
+	let mediaRecorder: MediaRecorder | undefined
 
 	navigator.mediaDevices
 		.getUserMedia({ audio: true })
 		.then((media) => {
-			mediaPresent = true;
+			mediaPresent = true
 			return new Promise((resolve) => {
-				mediaRecorder = new MediaRecorder(media);
+				mediaRecorder = new MediaRecorder(media)
 				mediaRecorder.ondataavailable = ({ data }) => {
-					resolve(data);
-				};
-				mediaRecorder.start();
-			});
+					resolve(data)
+				}
+				mediaRecorder.start()
+			})
 		})
 		.then((blob: Blob) => blob.arrayBuffer())
 		//.then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer));
 		.then((arrayBuffer) => {
-			sendLabel(label);
-			sendAudio(arrayBuffer);
-			console.log({ label, arrayBuffer });
-		});
-	let met;
+			sendLabel(label)
+			sendAudio(arrayBuffer)
+			console.log({ label, arrayBuffer })
+		})
+	let met
 </script>
 
 <template lang="pug">
@@ -242,8 +242,7 @@
 			box-shadow: 0 0 0 $buttonShadowRadius #fff;
 		}
 		&.square {
-			box-shadow: 0 0 0 $buttonShadowRadius + ($buttonDiff * $oneMinusSqrt2)
-				#fff;
+			box-shadow: 0 0 0 $buttonShadowRadius + ($buttonDiff * $oneMinusSqrt2) #fff;
 		}
 	}
 

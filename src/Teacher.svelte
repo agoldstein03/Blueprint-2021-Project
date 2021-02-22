@@ -39,7 +39,7 @@
 						connData[conn.peer].label = data.label
 						break
 					case 'audio':
-						connData[conn.peer].audio = new Int8Array(data.audio)
+						connData[conn.peer].audio = data.audio
 						break
 					case 'bpm':
 						break
@@ -52,7 +52,7 @@
 	let connData: {
 		[id: string]: {
 			label?: string
-			audio?: Int8Array
+			audio?: ArrayBuffer
 		}
 	} = {}
 
@@ -68,31 +68,34 @@
 		isPlaying = true
 		document.querySelector('.big-play').style.display = 'none'
 		document.querySelector('.big-pause').style.display = 'block'
-		document.querySelector('.big-play').style.padding = '0'
-		document.querySelector('.big-pause').style.padding = '0'
 	}
 
+	$: if (
+		!isPlaying &&
+		document.querySelector('.big-play') &&
+		document.querySelector('.big-play').style.display === 'none'
+	)
+		pauseAll()
+
 	function pauseAll() {
-		isPlaying = false
+		if (isPlaying) isPlaying = false
 		document.querySelector('.big-play').style.display = 'block'
 		document.querySelector('.big-pause').style.display = 'none'
-		document.querySelector('.big-play').style.padding = '0'
-		document.querySelector('.big-pause').style.padding = '0'
 	}
 </script>
 
 <template lang="pug">
     div.bruh
       h1.title Harmony
-      h2.code {window.location.href.slice(window.location.href.indexOf('/create/') + 8, window.location.href.indexOf('/create/') + 16)}
-      Button.big-play(hidden, filled, style="position: absolute; bottom: 3em; right: 3em; background: white; border-radius: 3em; padding: 8px; width: 6em; height: 6em;", on:click!="{playAll}")
+      h2.code {id}
+      Button.big-play(hidden, filled, style="display: block; position: absolute; bottom: 3em; right: 3em; background: white; border-radius: 3em;", on:click!="{playAll}")
         Play(color="{iconColor}", width="{iconSize}", height="{iconSize}")
-      Button.big-pause(hidden, filled, style="display: none; position: absolute; bottom: 3em; right: 3em; background: white; border-radius: 3em; padding: 8px; width: 6em; height: 6em;", on:click!="{pauseAll}")
+      Button.big-pause(hidden, filled, style="display: none; position: absolute; bottom: 3em; right: 3em; background: white; border-radius: 3em;", on:click!="{pauseAll}")
         Pause(color="{iconColor}", width="{iconSize}", height="{iconSize}")
     div.gradient
 
     +each("Object.entries(connData).filter(([key, value]) => (value && value.label && value.audio)) as [trackId, track] (trackId)")
-      Track(label="{track.label}" audio="{track.audio}")
+      Track(label="{track.label}" audio="{track.audio}" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")
     //- Track(label="test" audio="oh no" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")
     //- Track(label="test" audio="oh no" bind:isPlaying="{isPlaying}" bind:playheadPos="{playheadPos}")
 

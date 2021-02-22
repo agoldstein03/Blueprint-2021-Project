@@ -3,7 +3,7 @@ export type PeerDataType = {
     label: string
 } | {
     type: "audio",
-    audio: Int8Array
+    audio: ArrayBuffer
 } | {
     type: "bpm",
     bpm: number
