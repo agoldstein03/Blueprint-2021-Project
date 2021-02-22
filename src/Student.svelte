@@ -4,7 +4,7 @@
 	import Peer, { DataConnection, PeerConnectOption } from "peerjs";
 	import { onMount } from "svelte";
 	import type { PeerDataType } from "./PeerDataType";
-	import Metronome from "./metronome.svelte";
+	import Metronome from "./Metronome.svelte";
 	/// <reference types="dom-mediacapture-record" />
 
 	export let id: string;
