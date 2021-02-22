@@ -11,31 +11,34 @@
 	document.addEventListener("click", () => {
 		if (!peaks) {
 			$audioContext.resume();
-			const options = {
-				containers: {
-					overview: waveform,
-				},
-				mediaElement: waveform.parentElement.querySelector("audio"),
-				webAudio: {
-					audioBuffer: $audioContext.decodeAudioData(
-						new Int8Array(arrayBuffer).buffer
-					),
-				},
-				overviewWaveformColor: "rgba(255, 255, 255, 1)",
-				playheadColor: "rgba(255, 255, 255, 1)",
-			};
-			Peaks.init(options, function (err, instance) {
-				const view = instance.views.getView("overview");
-				view.setAmplitudeScale(0.8);
-				view.fitToContainer();
-				waveform
-					.querySelector(".konvajs-content")
-					.removeChild(waveform.getElementsByTagName("canvas")[4]);
-				peaks = instance;
-				peaks.on("player.seeked", (time) => {
-					playheadPos = time;
+			$audioContext
+				.decodeAudioData(new Int8Array(arrayBuffer).buffer)
+				.then((audioBuffer) => {
+					const options = {
+						containers: {
+							overview: waveform,
+						},
+						mediaElement: waveform.parentElement.querySelector("audio"),
+						webAudio: { audioBuffer },
+						overviewWaveformColor: "rgba(255, 255, 255, 1)",
+						playheadColor: "rgba(255, 255, 255, 1)",
+					};
+					Peaks.init(options, function (err, instance) {
+						if (err) {
+							console.error(err);
+						}
+						const view = instance.views.getView("overview");
+						view.setAmplitudeScale(0.8);
+						view.fitToContainer();
+						waveform
+							.querySelector(".konvajs-content")
+							.removeChild(waveform.getElementsByTagName("canvas")[4]);
+						peaks = instance;
+						peaks.on("player.seeked", (time) => {
+							playheadPos = time;
+						});
+					});
 				});
-			});
 		}
 	});
 
@@ -67,7 +70,7 @@
     div.waveform(bind:this="{waveform}")
     div.muted
     // Temporary
-    audio(src='../oof.mp3')
+    audio(src='/oof.mp3')
         track(kind='captions')
 </template>
 

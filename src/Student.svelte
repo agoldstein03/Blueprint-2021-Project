@@ -12,7 +12,8 @@
 	let peer: Peer | undefined;
 	let conn: DataConnection | undefined;
 	let bpm: number | undefined;
-	$: ready = bpm !== undefined;
+	let note: number | undefined;
+	$: ready = bpm !== undefined && note !== undefined;
 
 	onMount(() => {
 		peer = new Peer();
@@ -32,6 +33,8 @@
 					case "bpm":
 						bpm = data.bpm;
 						break;
+					case "note":
+						note = data.note;
 				}
 			});
 			console.log({ conn });
@@ -137,7 +140,7 @@
 </script>
 
 <template lang="pug">
-	Metronome(bind:this="{met}" tempo="{bpm}")
+	Metronome(bind:this="{met}" tempo="{bpm}" note="{note}")
 	//- p Student
 	//- p {peer?.id}
 	.background

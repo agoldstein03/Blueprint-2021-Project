@@ -7,4 +7,7 @@ export type PeerDataType = {
 } | {
     type: "bpm",
     bpm: number
+} | {
+    type: "note",
+    note: number
 }

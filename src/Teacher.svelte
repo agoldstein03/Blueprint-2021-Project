@@ -8,7 +8,7 @@
 	import Play from "svelte-material-icons/Play.svelte";
 	import Pause from "svelte-material-icons/Pause.svelte";
 
-	export let id: string | undefined, bpm: number;
+	export let id: string | undefined, bpm: number, note: number;
 	console.log({ id });
 
 	let peer: Peer | undefined;
@@ -31,6 +31,7 @@
 				console.log("OPEN!!");
 				connData[conn.peer] = {};
 				send(conn, { type: "bpm", bpm });
+				send(conn, { type: "note", note });
 			});
 			conn.on("data", (data: PeerDataType) => {
 				console.log({ data });
@@ -42,6 +43,7 @@
 						connData[conn.peer].audio = new Int8Array(data.audio);
 						break;
 					case "bpm":
+					case "note":
 						break;
 				}
 			});
