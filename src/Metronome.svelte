@@ -15,7 +15,8 @@
 	// This is calculated from lookahead, and overlaps
 	// with next interval (in case the timer is late)
 	var nextNoteTime = 0.0; // when the next note is due.
-	var noteResolution = 0; // 0 == 16th, 1 == 8th, 2 == quarter note
+	export let note = 2;
+	$: noteResolution = note; // 0 == 16th, 1 == 8th, 2 == quarter note
 	var noteLength = 0.05; // length of "beep" (in seconds)
 	var canvas, // the canvas element
 		canvasContext; // canvasContext is the canvas' context 2D

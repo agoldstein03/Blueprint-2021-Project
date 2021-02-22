@@ -15,9 +15,9 @@
 			Home
 		Route(path='/submit/:id' let:params="{params}")
 			Student(id="{params.id}")
-		Route(path='/create/:id/:bpm' let:params="{params}")
+		Route(path='/create/:id/:bpm/:note' let:params="{params}")
 			//+debug("params")
-			Teacher(id="{params.id}" bpm="{params.bpm}")
+			Teacher(id="{params.id}" bpm="{params.bpm}" note="{params.note}")
 </template>
 
 <style lang="scss" global>
@@ -62,7 +62,7 @@
 		overflow-x: hidden;
 		width: 100%;
 		height: 100%;
-        background-color: #262626;
+		background-color: #262626;
 	}
 
 	@media only screen and (min-width: 768px) and (max-width: 1280px) {

@@ -1,6 +1,6 @@
 <script>
 	import Slider from "./HorizontalSlider.svelte";
-	import { Modal, Dialog, Card, Button } from "attractions";
+	import { Modal, Dialog, Card, Button, RadioGroup } from "attractions";
 	import { navigate } from "svelte-routing";
 
 	let modalOpen = false;
@@ -23,6 +23,14 @@
 		}
 		return String.fromCharCode(...codes);
 	}
+
+	const notes = [
+		{ value: 0, label: "1/16th note" },
+		{ value: 1, label: "1/8th note" },
+		{ value: 2, label: "1/4 note" },
+	];
+
+	let note = 0;
 </script>
 
 <template lang="pug">
@@ -39,10 +47,12 @@
 	Modal(bind:open='{modalOpen}' let:closeCallback="{closeCallback}")
 			Dialog(title='Select Tempo!', closeCallback="{closeCallback}")
 				div.start-modal
-					form.formcontainer(on:submit!="{() => {navigate(`/create/${generateCode()}/${tempo}`)}}")
+					form.formcontainer(on:submit!="{() => {navigate(`/create/${generateCode()}/${tempo}/${note}`)}}")
 						input.tempo-input(type='number' placeholder="Enter the Tempo!" bind:value="{tempo}")
 						input.gradient-button.gradient-button-3(type='submit', value='Make My Meeting!', min="10", max="500")
 						Slider(bind:value="{tempo}", min=10, max = 500)
+						p {note}
+						RadioGroup(items="{notes}" name="Note" bind:value="{note}")
 </template>
 
 <style lang="scss">
