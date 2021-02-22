@@ -8,12 +8,6 @@
 	let peaks;
 	$: if (peaks && playheadPos) peaks.player.seek(playheadPos);
 
-    const buf = new ArrayBuffer(arrayBuffer.byteLength);
-    const dataView = new DataView(buf)
-    arrayBuffer.forEach((b, i) => {
-        dataView.setInt32(i * arrayBuffer.BYTES_PER_ELEMENT, b)
-    })
-    console.log(arrayBuffer.byteLength)
 	document.addEventListener("click", () => {
 		if (!peaks) {
 			$audioContext.resume();
@@ -24,9 +18,9 @@
 				mediaElement: waveform.parentElement.querySelector("audio"),
 				webAudio: {
 					audioBuffer: $audioContext.decodeAudioData(
-						buf
+						new Int8Array(arrayBuffer).buffer
 					),
-				}, 
+				},
 				overviewWaveformColor: "rgba(255, 255, 255, 1)",
 				playheadColor: "rgba(255, 255, 255, 1)",
 			};
@@ -72,6 +66,9 @@
 <template lang="pug">
     div.waveform(bind:this="{waveform}")
     div.muted
+    // Temporary
+    audio(src='../oof.mp3')
+        track(kind='captions')
 </template>
 
 <style>
