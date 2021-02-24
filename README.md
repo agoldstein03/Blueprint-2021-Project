@@ -1,4 +1,6 @@
-# New Project
+# Harmony
+
+Harmony is a web application that allows near-synchronous collaboration between musicians, with a focus on educational applications. When one arrives at the website, they can either enter a meeting code to join an existing room or create their own room. On creation, they are asked to enter a tempo to provide a standardized metronome for all members in the room. Once in the room, all members can record at their own pace with the metronome in their ear. The creator will have their own custom screen where they can see the various recordings, isolate recordings of their choice, and more giving them the opportunity to provide instantaneous feedback. Additionally, all clips can be played at the same time on the creator screen, so Harmony allows tracks to “merge” where traditionally students cant play together. This project was created by Adam Goldstein, Keshav Ganapathy, Tyler Lin, and Peter Ganunis, and was submitted to MIT Blueprint 2021 and d.hacks 2021.
 
 > ✨ Bootstrapped with Create Snowpack App (CSA).
 
